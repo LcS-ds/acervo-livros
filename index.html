@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153f35">
+  <meta name="description" content="Suas leituras, bem guardadas. Organize livros, descubra seu próximo título e acompanhe suas histórias no Acervo.">
+  <title>Acervo — suas leituras, bem guardadas</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><script src="config.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#collection">Pular para o acervo</a>
+  <header class="masthead">
+    <a class="brand" href="./" aria-label="Acervo, início"><span class="brand-mark" aria-hidden="true">a</span>acervo<span class="brand-dot">.</span></a>
+    <nav aria-label="Navegação principal"><a href="#collection" class="nav-active">Meu acervo</a><a href="https://github.com/LcS-ds/acervo-livros" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
+    <span id="connection-indicator" class="connection-indicator">Conectando</span>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> UM LUGAR PARA SUAS HISTÓRIAS</p>
+        <h1 id="page-title">A próxima página<br>é <em>só o começo.</em></h1>
+        <p class="hero-description">Guarde os livros que marcaram você.<br>Abra espaço para os que ainda vão marcar.</p>
+        <div class="hero-actions"><button class="button button-primary" id="new-book-button" type="button"><span aria-hidden="true">＋</span> Adicionar livro</button><a class="hero-link" href="#collection">Explorar acervo <span aria-hidden="true">↓</span></a></div>
+        <div class="hero-footnote"><span aria-hidden="true">✦</span> CADA LIVRO, UM NOVO COMEÇO.</div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orb orb-one"></div><div class="orb orb-two"></div><span class="art-star">✳</span>
+        <div class="hero-book book-back"><div class="cover-series">BIBLIOTECA ACERVO</div><strong>Entre<br>páginas</strong><div class="cover-line"></div><span class="cover-bottom">UM MUNDO INTEIRO</span></div>
+        <div class="hero-book book-front"><div class="cover-series">COLEÇÃO DE HISTÓRIAS</div><strong>O prazer<br>de <em>ler.</em></strong><div class="sun-art"></div><span class="cover-bottom">ACERVO · EDIÇÃO PESSOAL</span></div>
+        <div class="art-caption"><span>01 — ∞</span> HISTÓRIAS PARA COLECIONAR</div>
+      </div>
+    </section>
+    <section class="reading-summary" aria-label="Resumo do acervo">
+      <div class="summary-intro"><span class="summary-symbol" aria-hidden="true">✳</span><span>Seu universo<br><strong>em palavras.</strong></span></div>
+      <div class="stat"><strong id="stat-total">—</strong><span>livros no acervo</span></div>
+      <div class="stat"><strong id="stat-reading">—</strong><span>leituras em andamento</span></div>
+      <div class="stat"><strong id="stat-read">—</strong><span>histórias concluídas</span></div>
+    </section>
+    <section id="collection" class="collection" aria-labelledby="collection-title">
+      <div class="section-heading"><div><p class="eyebrow">SUA ESTANTE, DO SEU JEITO</p><h2 id="collection-title">Meu acervo<span id="total-count" class="count">0</span></h2></div><button class="button button-outline" id="refresh-button" type="button" aria-label="Atualizar lista"><span aria-hidden="true">↻</span> Atualizar</button></div>
+      <div id="setup-panel" class="setup-panel" hidden><h3>Conecte seu Supabase</h3><p>Informe os dados públicos do projeto para carregar seus livros.</p><form id="setup-form"><label>URL do projeto<input id="project-url" type="url" required></label><label>Chave publishable<input id="publishable-key" type="text" autocomplete="off" required></label><button class="button button-primary" type="submit">Conectar</button></form></div>
+      <div class="toolbar">
+        <div class="status-tabs" role="group" aria-label="Filtrar por status"><button type="button" class="active" data-filter="todos" aria-pressed="true">Todos <span id="tab-total">0</span></button><button type="button" data-filter="quero-ler" aria-pressed="false">Quero ler</button><button type="button" data-filter="lendo" aria-pressed="false">Lendo</button><button type="button" data-filter="lido" aria-pressed="false">Lidos</button></div>
+        <label class="search-field"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><span class="sr-only">Buscar por título ou autor</span><input id="search-input" type="search" placeholder="Buscar título ou autor..."></label>
+        <select id="status-filter" class="sr-only" aria-label="Filtrar por status" tabindex="-1"><option value="todos">Todos</option><option value="quero-ler">Quero ler</option><option value="lendo">Lendo</option><option value="lido">Lidos</option></select>
+      </div>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <div id="book-list" class="book-list"></div>
+      <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">✳</span><h3>Uma estante cheia de possibilidades</h3><p id="empty-message">Adicione seu primeiro livro e comece uma nova história.</p></div>
+      <p id="result-count" class="result-count"></p>
+    </section>
+    <section class="closing-note"><span aria-hidden="true">✦</span><p>Alguns livros terminam.<br><em>As histórias ficam.</em></p><a href="#page-title">Voltar ao início ↑</a></section>
+  </main>
+  <footer><a class="brand" href="./">acervo<span class="brand-dot">.</span></a><span>Feito para quem gosta de virar a página.</span><a href="https://github.com/LcS-ds/acervo-livros" target="_blank" rel="noopener">Ver projeto no GitHub ↗</a></footer>
+  <dialog id="book-dialog" class="book-dialog" aria-labelledby="dialog-title">
+    <form id="book-form">
+      <div class="dialog-top"><p class="eyebrow">REGISTRO DO ACERVO</p><button id="close-dialog" type="button" class="icon-button" aria-label="Fechar">×</button></div>
+      <h2 id="dialog-title">Novo livro</h2>
+      <p class="dialog-help">Preencha os dados da obra para salvar no catálogo.</p>
+      <div class="form-grid">
+        <label class="full">Título <span aria-hidden="true">*</span><input id="book-title" name="titulo" maxlength="160" required placeholder="Ex.: Dom Casmurro"></label>
+        <label class="full">Autor(a) <span aria-hidden="true">*</span><input id="book-author" name="autor" maxlength="120" required placeholder="Ex.: Machado de Assis"></label>
+        <label>Gênero<input id="book-genre" name="genero" maxlength="60" placeholder="Ex.: Romance"></label>
+        <label>Ano de publicação<input id="book-year" name="ano_publicacao" type="number" min="1450" max="2100" placeholder="Ex.: 1899"></label>
+        <label class="full">Status<select id="book-status" name="situacao"><option value="quero-ler">Quero ler</option><option value="lendo">Lendo</option><option value="lido">Lido</option></select></label>
+        <label class="full">Notas<textarea id="book-notes" name="descricao" maxlength="1000" rows="3" placeholder="Uma observação sobre este livro (opcional)"></textarea></label>
+      </div>
+      <p id="form-error" class="form-error" role="alert"></p>
+      <div class="dialog-actions"><button id="cancel-dialog" type="button" class="button button-ghost">Cancelar</button><button id="save-book" type="submit" class="button button-primary">Salvar livro</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="delete-dialog" class="confirm-dialog" aria-labelledby="delete-title">
+    <h2 id="delete-title">Excluir livro?</h2>
+    <p>Este registro será removido do acervo. Essa ação não pode ser desfeita.</p>
+    <p id="delete-book-name" class="delete-book-name"></p>
+    <div class="dialog-actions"><button id="cancel-delete" type="button" class="button button-ghost">Cancelar</button><button id="confirm-delete" type="button" class="button button-danger">Excluir</button></div>
+  </dialog>
+<dialog id="detail-dialog" class="detail-dialog" aria-labelledby="detail-title"><button id="close-detail" class="icon-button detail-close" type="button" aria-label="Fechar detalhes">×</button><div id="detail-cover" class="detail-cover"></div><div class="detail-copy"><p class="eyebrow">DA SUA ESTANTE</p><h2 id="detail-title"></h2><p id="detail-author"></p><div id="detail-meta"></div><p id="detail-notes"></p><button id="detail-edit" class="button button-primary" type="button">Editar livro</button></div></dialog>
+</body>
+</html>
